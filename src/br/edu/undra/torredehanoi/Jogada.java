@@ -1,7 +1,7 @@
 package br.edu.undra.torredehanoi;
 
 /**
- *
+ * Classe modela uma jogada do torre de hanoi.
  * @author alexandre
  */
 public class Jogada {

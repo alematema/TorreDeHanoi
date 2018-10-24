@@ -13,7 +13,7 @@ public class Disco {
 
     @Override
     public String toString() {
-        return "DISCO-"+this.numero;
+        return "DISCO_"+this.numero;
     }
 
     public int getNumero() {
