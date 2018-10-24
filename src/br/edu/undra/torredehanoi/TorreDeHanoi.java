@@ -24,9 +24,9 @@ public class TorreDeHanoi {
      */
     public TorreDeHanoi(int numeroDeDiscos) {
 
-        pino1 = new Pino("ORIGEM");
-        pino2 = new Pino("DESTINO");
-        pino3 = new Pino("EXTRA");
+        pino1 = new Pino("PINO_1");
+        pino2 = new Pino("PINO_2");
+        pino3 = new Pino("PINO_3");
 
         for (int i = numeroDeDiscos; i >= 1; i--) {
             pino1.push(new Disco(i));
