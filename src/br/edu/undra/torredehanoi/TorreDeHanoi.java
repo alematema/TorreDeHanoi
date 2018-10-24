@@ -20,6 +20,10 @@ public class TorreDeHanoi {
 
     public TorreDeHanoi(int numeroDeDiscos) {
 
+        if (numeroDeDiscos <= 0) {
+            throw new Error("IMPOSSÍVEL JOGAR COM " + numeroDeDiscos + " DISCO(S). TENTE NOVAMENTE. NÚMEROS POSITIVOS APENAS.");
+        }
+
         this.numeroDeDiscos = numeroDeDiscos;
 
         origem = new Pino("ORIGEM");
@@ -46,7 +50,9 @@ public class TorreDeHanoi {
         for (int i = 0; i < pinos.size(); i++) {
 
             estado.append(pinos.get(i).getEstado());
-            if( i < pinos.size() - 1 ) estado.append("\n");
+            if (i < pinos.size() - 1) {
+                estado.append("\n");
+            }
 
         }
 
@@ -61,7 +67,7 @@ public class TorreDeHanoi {
         }
 
         switch (n_1) {
-            
+
             case 0:
                 joga(origem, extra);
                 break;
@@ -75,7 +81,7 @@ public class TorreDeHanoi {
                 break;
             default:
                 //RECURSAO
-                move_N( origem, extra, destino, n_1 - 1 );
+                move_N(origem, extra, destino, n_1 - 1);
                 joga(origem, extra);
                 int discos = n_1 - 1;
                 move_N(destino, origem, extra, discos);
@@ -83,26 +89,25 @@ public class TorreDeHanoi {
         }
 
     }
-    
-    public void jogar(){
-        
+
+    public void jogar() {
+
         System.err.println("========== ESTADO DO JOGO AO INICIAR ===============");
         System.err.println(this.getEstado());
         System.err.println("======================================================\n");
-        
-        
+
         move_N(origem, destino, extra, origem.getNumDiscos() - 1);
         joga(origem, destino);
         move_N(extra, origem, destino, extra.getNumDiscos());
-        System.err.println("========== "+this.jogadas.size()+" JOGADAS ===============");
-        
-        jogadas.forEach( j -> System.err.println(j) );
-        
+        System.err.println("========== " + this.jogadas.size() + " JOGADAS ===============");
+
+        jogadas.forEach(j -> System.err.println(j));
+
         System.err.println("========== FIM JOGADAS ===============");
         System.err.println("\n========== ESTADO DO JOGO AO FINALIZAR ===============");
         System.err.println(this.getEstado());
         System.err.println("======================================================\n");
-        
+
     }
 
     private void joga(Pino origem, Pino destino) {
@@ -128,9 +133,9 @@ public class TorreDeHanoi {
             }
 
         } else {
-            
+
             System.err.println("NAO FOI POSSIVEL JOGAR PORQUE NAO HA DISCOS EM " + origem.toString());
-            
+
         }
 
     }
@@ -160,17 +165,21 @@ public class TorreDeHanoi {
     }
 
     public static void main(String[] args) {
-        
+
         int numeroDeDiscos = 4;
-        
-        if( args != null && args.length > 0){
-            numeroDeDiscos = Integer.parseInt(args[0]);
+
+        if (args != null && args.length > 0) {
+            try {
+                numeroDeDiscos = Integer.parseInt(args[0]);
+            } catch (Exception e) {
+                throw new Error("IMPOSSÍVEL JOGAR COM " + args[0] + " DISCO(S). TENTE NOVAMENTE. NÚMEROS POSITIVOS APENAS.");
+            }
+
         }
 
         TorreDeHanoi torreDeHanoi = new TorreDeHanoi(numeroDeDiscos);
 
         torreDeHanoi.jogar();
-        
 
     }
 
