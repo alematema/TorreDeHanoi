@@ -17,11 +17,12 @@ public class TorreDeHanoi {
     private final List<Pino> pinos;
     private final List<Jogada> jogadas;
 
-    private final int numeroDeDiscos;
-
+    /**
+     * Controi um jogo, e, inicialmente. empilha todos discos no pino1. 
+     * 
+     * @param numeroDeDiscos o numero de discos da torre.
+     */
     public TorreDeHanoi(int numeroDeDiscos) {
-
-        this.numeroDeDiscos = numeroDeDiscos;
 
         pino1 = new Pino("ORIGEM");
         pino2 = new Pino("DESTINO");
@@ -58,12 +59,13 @@ public class TorreDeHanoi {
     }
 
     /**
-     * Move {@code} <strong>n</strong> discos do pino origem para pino
+     * Move, <strong>RECURSIVAMENTE, {@code} n</strong> discos do pino origem para pino
  <strong>extra</strong>.
+ *  
      * @param origem Pino origem
      * @param destino Pino destino
      * @param extra Pino extra
-     * @param n a quantidade de discos que sera movida de origem para destino.
+     * @param n numero de discos que serao movidos da origem para destino.
      */
     public void move_N(Pino origem, Pino destino, Pino extra, int n) {
 
@@ -88,8 +90,7 @@ public class TorreDeHanoi {
                 //RECURSAO
                 move_N(origem, extra, destino, n - 1);
                 move(origem, extra);
-                int discos = n - 1;
-                move_N(destino, origem, extra, discos);
+                move_N(destino, origem, extra, n - 1);
                 break;
         }
 
@@ -180,7 +181,6 @@ public class TorreDeHanoi {
             }
 
         }
-        
         
         if (numeroDeDiscos <= 0) {
             throw new Error("NO MOMENTO, IMPOSSÍVEL JOGAR COM " + numeroDeDiscos + " DISCO(S). TENTE NOVAMENTE. NÚMEROS INTEIROS POSITIVOS APENAS.");
