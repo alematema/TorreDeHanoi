@@ -5,6 +5,7 @@ import java.util.List;
 
 /**
  * Classe modela um jogo de hanoi.
+ *
  * @author alexandre
  */
 public class TorreDeHanoi {
@@ -33,7 +34,7 @@ public class TorreDeHanoi {
         pinos.add(origem);
         pinos.add(destino);
         pinos.add(extra);
-        
+
         jogadas = new ArrayList<>();
 
     }
@@ -45,36 +46,93 @@ public class TorreDeHanoi {
         for (int i = 0; i < pinos.size(); i++) {
 
             estado.append(pinos.get(i).getEstado());
-            estado.append("\n");
+            if( i < pinos.size() - 1 ) estado.append("\n");
 
         }
 
         return estado.toString();
 
     }
+
+    public void move_N(Pino origem, Pino destino, Pino extra, int n_1) {
+
+        if (n_1 < 0) {
+            return;
+        }
+
+        switch (n_1) {
+            
+            case 0:
+                joga(origem, extra);
+                break;
+            case 1:
+                joga(origem, extra);
+                break;
+            case 2:
+                joga(origem, destino);
+                joga(origem, extra);
+                joga(destino, extra);
+                break;
+            default:
+                //RECURSAO
+                move_N( origem, extra, destino, n_1 - 1 );
+                joga(origem, extra);
+                int discos = n_1 - 1;
+                move_N(destino, origem, extra, discos);
+                break;
+        }
+
+    }
     
-    public void joga(Pino origem, Pino destino){
+    public void jogar(){
         
+        System.err.println("========== ESTADO DO JOGO AO INICIAR ===============");
+        System.err.println(this.getEstado());
+        System.err.println("======================================================\n");
+        
+        
+        move_N(origem, destino, extra, origem.getNumDiscos() - 1);
+        joga(origem, destino);
+        move_N(extra, origem, destino, extra.getNumDiscos());
+        System.err.println("========== "+this.jogadas.size()+" JOGADAS ===============");
+        
+        jogadas.forEach( j -> System.err.println(j) );
+        
+        System.err.println("========== FIM JOGADAS ===============");
+        System.err.println("\n========== ESTADO DO JOGO AO FINALIZAR ===============");
+        System.err.println(this.getEstado());
+        System.err.println("======================================================\n");
+        
+    }
+
+    private void joga(Pino origem, Pino destino) {
+
         Disco d = origem.pop();
-        
-        if ( destino.podeEmpilharEsteDisco(d) ){
+
+        if (d != null) {
+
+            if (destino.podeEmpilharEsteDisco(d)) {
+
+                destino.push(d);
+
+                Jogada j = new Jogada(origem, destino, d);
+
+                jogadas.add(j);
+
+            } else {
+
+                System.err.println("NAO FOI POSSIVEL JOGAR " + d.toString() + " EM " + destino.toString());
+                //devolve
+                origem.push(d);
+
+            }
+
+        } else {
             
-            destino.push(d);
-            
-            Jogada j = new Jogada(origem, destino, d);
-            
-            jogadas.add(j);
-            
-            System.err.println(j);
-            
-        }else{
-            
-            System.err.println("NAO FOI POSSIVEL JOGAR " + d.toString()+ " EM "+destino.toString());
-            //devolve
-            origem.push(d);
+            System.err.println("NAO FOI POSSIVEL JOGAR PORQUE NAO HA DISCOS EM " + origem.toString());
             
         }
-        
+
     }
 
     public Pino getOrigem() {
@@ -88,10 +146,9 @@ public class TorreDeHanoi {
     public Pino getExtra() {
         return extra;
     }
-    
-    public void mover()
-    {
-        
+
+    public void mover() {
+
         //MOVER N-1 DISCOS DO PINO ORIGEM PARA PINO EXTRA
         //enquanto numDiscos em PINO ORIGEM > 1 E numDisco em PINO EXTRA < N-1
 //           1. PEGAR PROXIMO DISCO EM PINO ORIGEM.
@@ -100,69 +157,98 @@ public class TorreDeHanoi {
 //                   2.2 SE TEM, JOGA NELA ESSE DISCO.
 //           3.
         //fim enquanto           
-        
-        
     }
 
     public static void main(String[] args) {
+        
+        int numeroDeDiscos = 4;
+        
+        if( args != null && args.length > 0){
+            numeroDeDiscos = Integer.parseInt(args[0]);
+        }
 
-        TorreDeHanoi torreDeHanoi = new TorreDeHanoi(4);
-        System.err.println(torreDeHanoi.getEstado());
+        TorreDeHanoi torreDeHanoi = new TorreDeHanoi(6);
+
+        torreDeHanoi.jogar();
         
-        torreDeHanoi.joga(torreDeHanoi.getOrigem(), torreDeHanoi.getExtra());
-        System.err.println(torreDeHanoi.getEstado());
-        
-        torreDeHanoi.joga(torreDeHanoi.getOrigem(), torreDeHanoi.getDestino());
-        System.err.println(torreDeHanoi.getEstado());
-        
-        torreDeHanoi.joga(torreDeHanoi.getExtra(), torreDeHanoi.getDestino());
-        System.err.println(torreDeHanoi.getEstado());
-        
-        torreDeHanoi.joga(torreDeHanoi.getOrigem(), torreDeHanoi.getExtra());
-        System.err.println(torreDeHanoi.getEstado());
-        
-        torreDeHanoi.joga(torreDeHanoi.getDestino(), torreDeHanoi.getOrigem());
-        System.err.println(torreDeHanoi.getEstado());
-        
-        torreDeHanoi.joga(torreDeHanoi.getDestino(), torreDeHanoi.getExtra());
-        System.err.println(torreDeHanoi.getEstado());
-        
-        torreDeHanoi.joga(torreDeHanoi.getOrigem(), torreDeHanoi.getExtra());
-        System.err.println(torreDeHanoi.getEstado());
-        
+//        System.err.println(torreDeHanoi.getEstado());
+//        torreDeHanoi.move_N_ParaDestino(torreDeHanoi.getOrigem(), torreDeHanoi.getDestino(), torreDeHanoi.getExtra());
+//        System.err.println(torreDeHanoi.getEstado());
+
+//        //RESOLVE HANOI(3) DE ORIGEM PARA EXTRA      
+//        torreDeHanoi.joga(torreDeHanoi.getOrigem(), torreDeHanoi.getExtra());
+//        System.err.println(torreDeHanoi.getEstado());
+//
+//        torreDeHanoi.joga(torreDeHanoi.getOrigem(), torreDeHanoi.getDestino());
+//        System.err.println(torreDeHanoi.getEstado());
+//
+//        torreDeHanoi.joga(torreDeHanoi.getExtra(), torreDeHanoi.getDestino());
+//        System.err.println(torreDeHanoi.getEstado());
+//
+//        torreDeHanoi.joga(torreDeHanoi.getOrigem(), torreDeHanoi.getExtra());
+//        System.err.println(torreDeHanoi.getEstado());
+//
+//        torreDeHanoi.joga(torreDeHanoi.getDestino(), torreDeHanoi.getOrigem());
+//        System.err.println(torreDeHanoi.getEstado());
+//
+//        torreDeHanoi.joga(torreDeHanoi.getDestino(), torreDeHanoi.getExtra());
+//        System.err.println(torreDeHanoi.getEstado());
+//
+//        torreDeHanoi.joga(torreDeHanoi.getOrigem(), torreDeHanoi.getExtra());
+//        System.err.println(torreDeHanoi.getEstado());
         //ateh aqui resolve hanoi(3)
-        System.err.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
-        torreDeHanoi.joga(torreDeHanoi.getOrigem(), torreDeHanoi.getDestino());
-        System.err.println(torreDeHanoi.getEstado());
-        System.err.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
-        
-        torreDeHanoi.joga(torreDeHanoi.getExtra(), torreDeHanoi.getOrigem());
-        System.err.println(torreDeHanoi.getEstado());
-        
-        torreDeHanoi.joga(torreDeHanoi.getExtra(), torreDeHanoi.getDestino());
-        System.err.println(torreDeHanoi.getEstado());
-        
-        torreDeHanoi.joga(torreDeHanoi.getOrigem(), torreDeHanoi.getDestino());
-        System.err.println(torreDeHanoi.getEstado());
-        
-        torreDeHanoi.joga(torreDeHanoi.getExtra(), torreDeHanoi.getOrigem());
-        System.err.println(torreDeHanoi.getEstado());
-        
-        torreDeHanoi.joga(torreDeHanoi.getDestino(), torreDeHanoi.getExtra());
-        System.err.println(torreDeHanoi.getEstado());
-        
-        torreDeHanoi.joga(torreDeHanoi.getDestino(), torreDeHanoi.getOrigem());
-        System.err.println(torreDeHanoi.getEstado());
-        
-        torreDeHanoi.joga(torreDeHanoi.getExtra(), torreDeHanoi.getOrigem());
-        System.err.println(torreDeHanoi.getEstado());
-        
-        //ateh aqui REresolve hanoi(3)
-        System.err.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
-        torreDeHanoi.joga(torreDeHanoi.getDestino(), torreDeHanoi.getExtra());
-        System.err.println(torreDeHanoi.getEstado());
-        System.err.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
-
+//        System.err.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+//        torreDeHanoi.joga(torreDeHanoi.getOrigem(), torreDeHanoi.getDestino());
+//        System.err.println(torreDeHanoi.getEstado());
+//        System.err.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+//        
+//        torreDeHanoi.joga(torreDeHanoi.getExtra(), torreDeHanoi.getOrigem());
+//        System.err.println(torreDeHanoi.getEstado());
+//        
+//        torreDeHanoi.joga(torreDeHanoi.getExtra(), torreDeHanoi.getDestino());
+//        System.err.println(torreDeHanoi.getEstado());
+//        
+//        torreDeHanoi.joga(torreDeHanoi.getOrigem(), torreDeHanoi.getDestino());
+//        System.err.println(torreDeHanoi.getEstado());
+//        
+//        torreDeHanoi.joga(torreDeHanoi.getExtra(), torreDeHanoi.getOrigem());
+//        System.err.println(torreDeHanoi.getEstado());
+//        
+//        torreDeHanoi.joga(torreDeHanoi.getDestino(), torreDeHanoi.getExtra());
+//        System.err.println(torreDeHanoi.getEstado());
+//        
+//        torreDeHanoi.joga(torreDeHanoi.getDestino(), torreDeHanoi.getOrigem());
+//        System.err.println(torreDeHanoi.getEstado());
+//        
+//        torreDeHanoi.joga(torreDeHanoi.getExtra(), torreDeHanoi.getOrigem());
+//        System.err.println(torreDeHanoi.getEstado());
+//        
+//        //ateh aqui REresolve hanoi(3)
+//        System.err.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+//        torreDeHanoi.joga(torreDeHanoi.getDestino(), torreDeHanoi.getExtra());
+//        System.err.println(torreDeHanoi.getEstado());
+//        System.err.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+// RESOLVE HANOI(3) DE ORIGEM PARA DESTINO
+//        torreDeHanoi.joga(torreDeHanoi.getOrigem(), torreDeHanoi.getDestino());
+//        System.err.println(torreDeHanoi.getEstado());
+//        
+//        torreDeHanoi.joga(torreDeHanoi.getOrigem(), torreDeHanoi.getExtra());
+//        System.err.println(torreDeHanoi.getEstado());
+//        
+//        torreDeHanoi.joga(torreDeHanoi.getDestino(), torreDeHanoi.getExtra());
+//        System.err.println(torreDeHanoi.getEstado());
+//        
+//        torreDeHanoi.joga(torreDeHanoi.getOrigem(), torreDeHanoi.getDestino());
+//        System.err.println(torreDeHanoi.getEstado());
+//        
+//        torreDeHanoi.joga(torreDeHanoi.getExtra(), torreDeHanoi.getOrigem());
+//        System.err.println(torreDeHanoi.getEstado());
+//        
+//        torreDeHanoi.joga(torreDeHanoi.getExtra(), torreDeHanoi.getDestino());
+//        System.err.println(torreDeHanoi.getEstado());
+//        
+//        torreDeHanoi.joga(torreDeHanoi.getOrigem(), torreDeHanoi.getDestino());
+//        System.err.println(torreDeHanoi.getEstado());
     }
 
 }

@@ -5,6 +5,7 @@ import java.util.List;
 
 /**
  * Classe modela um pino do jogo torre de hanoi.
+ *
  * @author alexandre
  */
 public class Pino {
@@ -15,7 +16,7 @@ public class Pino {
     public Pino(String nome) {
         this.nome = nome;
     }
-    
+
     public Pino(List<Disco> discos) {
         this.discos = discos;
     }
@@ -26,29 +27,37 @@ public class Pino {
 
     public Disco pop() {
 
-        Disco d = discos.get(discos.size() - 1);
-        discos.remove(discos.size() - 1);
+        Disco d = null;
+
+        if (!discos.isEmpty()) {
+
+            d = discos.get(discos.size() - 1);
+            discos.remove(discos.size() - 1);
+
+        }
 
         return d;
     }
-    
-    public boolean podeEmpilharEsteDisco(Disco d){
-        
-        if( this.discos.isEmpty() ) return true;
-        
+
+    public boolean podeEmpilharEsteDisco(Disco d) {
+
+        if (this.discos.isEmpty()) {
+            return true;
+        }
+
         //pega o altissimo
         Disco discoDoTopoDaTorre = this.pop();
-        
+
         boolean podeEmpilhar = discoDoTopoDaTorre.getNumero() > d.getNumero();
 
         //devolve o altissimo
         this.push(discoDoTopoDaTorre);
-        
+
         return podeEmpilhar;
-        
+
     }
-    
-    public int getNumDiscos(){
+
+    public int getNumDiscos() {
         return discos.size();
     }
 
@@ -72,23 +81,23 @@ public class Pino {
     public String toString() {
         return this.nome;
     }
-    
+
     public static void main(String[] args) {
-        
+
         Pino pino = new Pino("PINO-T");
         pino.push(new Disco(5));
         System.err.println(pino.getEstado());
         Disco d = pino.pop();
         System.err.println(d);
         System.err.println(pino.getEstado());
-        
+
         pino.push(d);
         pino.push(new Disco(4));
         System.err.println(pino.getEstado());
         pino.pop();
         pino.pop();
         System.err.println(pino.getEstado());
-        
+
     }
 
 }
