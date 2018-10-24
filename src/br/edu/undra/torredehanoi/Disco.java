@@ -1,7 +1,7 @@
 package br.edu.undra.torredehanoi;
 
 /**
- *
+ * Classe modela um disco da torre de hanoi.
  * @author alexandre
  */
 public class Disco {
@@ -15,10 +15,13 @@ public class Disco {
     public String toString() {
         return "DISCO-"+this.numero;
     }
+
+    public int getNumero() {
+        return numero;
+    }
     
     public static void main(String[] args) {
         System.out.println(new Disco(100));
     }
-    
     
 }

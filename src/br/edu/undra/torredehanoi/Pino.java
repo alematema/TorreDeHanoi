@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
+ * Classe modela um pino do jogo torre de hanoi.
  * @author alexandre
  */
 public class Pino {
@@ -30,6 +30,26 @@ public class Pino {
         discos.remove(discos.size() - 1);
 
         return d;
+    }
+    
+    public boolean podeEmpilharEsteDisco(Disco d){
+        
+        if( this.discos.isEmpty() ) return true;
+        
+        //pega o altissimo
+        Disco discoDoTopoDaTorre = this.pop();
+        
+        boolean podeEmpilhar = discoDoTopoDaTorre.getNumero() > d.getNumero();
+
+        //devolve o altissimo
+        this.push(discoDoTopoDaTorre);
+        
+        return podeEmpilhar;
+        
+    }
+    
+    public int getNumDiscos(){
+        return discos.size();
     }
 
     public String getEstado() {
