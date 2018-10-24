@@ -21,10 +21,6 @@ public class TorreDeHanoi {
 
     public TorreDeHanoi(int numeroDeDiscos) {
 
-        if (numeroDeDiscos <= 0) {
-            throw new Error("IMPOSSÍVEL JOGAR COM " + numeroDeDiscos + " DISCO(S). TENTE NOVAMENTE. NÚMEROS POSITIVOS APENAS.");
-        }
-
         this.numeroDeDiscos = numeroDeDiscos;
 
         pino1 = new Pino("ORIGEM");
@@ -180,9 +176,14 @@ public class TorreDeHanoi {
             try {
                 numeroDeDiscos = Integer.parseInt(args[0]);
             } catch (Exception e) {
-                throw new Error("IMPOSSÍVEL JOGAR COM " + args[0] + " DISCO(S). TENTE NOVAMENTE. NÚMEROS POSITIVOS APENAS.");
+                throw new Error("NO NOMENTO, IMPOSSÍVEL JOGAR COM " + args[0] + " DISCO(S). TENTE NOVAMENTE. NÚMEROS INTEIROS POSITIVOS APENAS.");
             }
 
+        }
+        
+        
+        if (numeroDeDiscos <= 0) {
+            throw new Error("NO MOMENTO, IMPOSSÍVEL JOGAR COM " + numeroDeDiscos + " DISCO(S). TENTE NOVAMENTE. NÚMEROS INTEIROS POSITIVOS APENAS.");
         }
 
         TorreDeHanoi torreDeHanoi = new TorreDeHanoi(numeroDeDiscos);
