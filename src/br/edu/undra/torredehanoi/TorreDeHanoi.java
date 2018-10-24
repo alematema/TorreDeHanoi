@@ -123,7 +123,7 @@ public class TorreDeHanoi {
     }
 
     /**
-     * Move o disco mais alto da torre no pino pino1 para o pino pino2. 
+     * Move o disco mais alto do pino origem para o pino destino. 
      * @param origem o pino de onde se pegara o mais alto disco.
      * @param destino o pino que receberá o disco.
      */
