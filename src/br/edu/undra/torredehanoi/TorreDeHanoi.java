@@ -4,15 +4,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Classe modela um jogo de hanoi.
+ * Classe modela um jogo de hanoi.<br>
+ * Resolve o jogo usando recursao sobre o número n de discos. 
  *
  * @author alexandre
  */
 public class TorreDeHanoi {
 
-    private final Pino origem;
-    private final Pino destino;
-    private final Pino extra;
+    private final Pino pino1;
+    private final Pino pino2;
+    private final Pino pino3;
     private final List<Pino> pinos;
     private final List<Jogada> jogadas;
 
@@ -26,18 +27,18 @@ public class TorreDeHanoi {
 
         this.numeroDeDiscos = numeroDeDiscos;
 
-        origem = new Pino("ORIGEM");
-        destino = new Pino("DESTINO");
-        extra = new Pino("EXTRA");
+        pino1 = new Pino("ORIGEM");
+        pino2 = new Pino("DESTINO");
+        pino3 = new Pino("EXTRA");
 
         for (int i = numeroDeDiscos; i >= 1; i--) {
-            origem.push(new Disco(i));
+            pino1.push(new Disco(i));
         }
 
         pinos = new ArrayList();
-        pinos.add(origem);
-        pinos.add(destino);
-        pinos.add(extra);
+        pinos.add(pino1);
+        pinos.add(pino2);
+        pinos.add(pino3);
 
         jogadas = new ArrayList<>();
 
@@ -60,45 +61,59 @@ public class TorreDeHanoi {
 
     }
 
-    public void move_N(Pino origem, Pino destino, Pino extra, int n_1) {
+    /**
+     * Move {@code} <strong>n</strong> discos do pino origem para pino
+ <strong>extra</strong>.
+     * @param origem Pino origem
+     * @param destino Pino destino
+     * @param extra Pino extra
+     * @param n a quantidade de discos que sera movida de origem para destino.
+     */
+    public void move_N(Pino origem, Pino destino, Pino extra, int n) {
 
-        if (n_1 < 0) {
+        if (n < 0) {
             return;
         }
 
-        switch (n_1) {
+        switch (n) {
 
             case 0:
-                joga(origem, extra);
+                move(origem, extra);
                 break;
             case 1:
-                joga(origem, extra);
+                move(origem, extra);
                 break;
             case 2:
-                joga(origem, destino);
-                joga(origem, extra);
-                joga(destino, extra);
+                move(origem, destino);
+                move(origem, extra);
+                move(destino, extra);
                 break;
             default:
                 //RECURSAO
-                move_N(origem, extra, destino, n_1 - 1);
-                joga(origem, extra);
-                int discos = n_1 - 1;
+                move_N(origem, extra, destino, n - 1);
+                move(origem, extra);
+                int discos = n - 1;
                 move_N(destino, origem, extra, discos);
                 break;
         }
 
     }
 
+    /**
+     *
+     */
     public void jogar() {
 
         System.err.println("========== ESTADO DO JOGO AO INICIAR ===============");
         System.err.println(this.getEstado());
         System.err.println("======================================================\n");
 
-        move_N(origem, destino, extra, origem.getNumDiscos() - 1);
-        joga(origem, destino);
-        move_N(extra, origem, destino, extra.getNumDiscos());
+        move_N(pino1, pino2, pino3, pino1.getNumDiscos() - 1);
+        
+        move(pino1, pino2);
+        
+        move_N(pino3, pino1, pino2, pino3.getNumDiscos() );
+        
         System.err.println("========== " + this.jogadas.size() + " JOGADAS ===============");
 
         jogadas.forEach(j -> System.err.println(j));
@@ -110,7 +125,12 @@ public class TorreDeHanoi {
 
     }
 
-    private void joga(Pino origem, Pino destino) {
+    /**
+     * Move o disco mais alto da torre no pino pino1 para o pino pino2. 
+     * @param origem o pino de onde se pegara o mais alto disco.
+     * @param destino o pino que receberá o disco.
+     */
+    private void move(Pino origem, Pino destino) {
 
         Disco d = origem.pop();
 
@@ -140,28 +160,16 @@ public class TorreDeHanoi {
 
     }
 
-    public Pino getOrigem() {
-        return origem;
+    public Pino getPino1() {
+        return pino1;
     }
 
-    public Pino getDestino() {
-        return destino;
+    public Pino getPino2() {
+        return pino2;
     }
 
-    public Pino getExtra() {
-        return extra;
-    }
-
-    public void mover() {
-
-        //MOVER N-1 DISCOS DO PINO ORIGEM PARA PINO EXTRA
-        //enquanto numDiscos em PINO ORIGEM > 1 E numDisco em PINO EXTRA < N-1
-//           1. PEGAR PROXIMO DISCO EM PINO ORIGEM.
-//           2. TEM POSICAO EM PINO DESTINO OU EXTRA ?
-//                   2.1 SE NAO TEM POSICAO, DEVOLVE DISCO `A ORIGEM E CRIA UMA POSICAO, MODIFICANDO DESTINO E EXTRA
-//                   2.2 SE TEM, JOGA NELA ESSE DISCO.
-//           3.
-        //fim enquanto           
+    public Pino getPino3() {
+        return pino3;
     }
 
     public static void main(String[] args) {
