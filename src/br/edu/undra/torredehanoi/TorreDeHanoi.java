@@ -18,6 +18,7 @@ public class TorreDeHanoi {
     private final Pino pino3;
     private final List<Pino> pinos;
     private final List<Jogada> jogadas;
+    private int intervaloEntreJogadas = 3500;
 
     /**
      * Controi um jogo, e, inicialmente. empilha todos discos no pino1. 
@@ -40,7 +41,22 @@ public class TorreDeHanoi {
         pinos.add(pino3);
 
         jogadas = new ArrayList<>();
+        
+        intervaloEntreJogadas = 3500;
 
+    }
+    
+        /**
+     * Controi um jogo, e, inicialmente. empilha todos discos no pino1. 
+     * 
+     * @param numeroDeDiscos o numero de discos da torre.
+     * @param intervaloEntreJogadas o intervalo entre as jogadas. 
+     */
+    public TorreDeHanoi(int numeroDeDiscos , int intervaloEntreJogadas) {
+
+        this(numeroDeDiscos);
+        this.intervaloEntreJogadas = intervaloEntreJogadas;
+        
     }
 
     public String getEstado() {
@@ -150,7 +166,7 @@ public class TorreDeHanoi {
                  System.err.println(this.getEstado()+"\n");
                  
                 try {
-                    Thread.sleep(3500);
+                    Thread.sleep(intervaloEntreJogadas);
                 } catch (InterruptedException ex) {
                     Logger.getLogger(TorreDeHanoi.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -186,8 +202,9 @@ public class TorreDeHanoi {
     public static void main(String[] args) {
 
         int numeroDeDiscos = 5;
+        int intervaloEntreJogadas = 3000;
 
-        if (args != null && args.length > 0) {
+        if (args != null && args.length == 1) {
             try {
                 numeroDeDiscos = Integer.parseInt(args[0]);
             } catch (NumberFormatException e) {
@@ -199,8 +216,30 @@ public class TorreDeHanoi {
         if (numeroDeDiscos <= 0) {
             throw new Error("NO MOMENTO, IMPOSSÍVEL JOGAR COM " + numeroDeDiscos + " DISCO(S). TENTE NOVAMENTE. NÚMEROS INTEIROS POSITIVOS APENAS.");
         }
-
-        TorreDeHanoi torreDeHanoi = new TorreDeHanoi(numeroDeDiscos);
+        
+        if (args != null && args.length == 2) {
+            try {
+                numeroDeDiscos = Integer.parseInt(args[0]);
+            } catch (NumberFormatException e) {
+                throw new Error("NO NOMENTO, IMPOSSÍVEL JOGAR COM " + args[0] + " DISCO(S). TENTE NOVAMENTE. NÚMEROS INTEIROS POSITIVOS APENAS.");
+            }
+            try {
+                intervaloEntreJogadas = Integer.parseInt(args[1]);
+            } catch (NumberFormatException e) {
+                throw new Error("NO NOMENTO, IMPOSSÍVEL JOGAR COM " + args[1] + " ,POIS É INTERVALO NEGATIVO ENTRE JOGADAS. TENTE NOVAMENTE. NÚMEROS INTEIROS POSITIVOS APENAS.");
+            }
+            
+        }
+        
+        if (numeroDeDiscos <= 0) {
+            throw new Error("NO MOMENTO, IMPOSSÍVEL JOGAR COM " + numeroDeDiscos + " DISCO(S). TENTE NOVAMENTE. NÚMEROS INTEIROS POSITIVOS APENAS.");
+        }
+        
+        if( intervaloEntreJogadas < 0 ){
+            throw new Error("NO MOMENTO, IMPOSSÍVEL JOGAR COM " + intervaloEntreJogadas + " ,POIS É INTERVALO NEGATIVO ENTRE JOGADAS. TENTE NOVAMENTE. NÚMEROS INTEIROS POSITIVOS APENAS.");
+        }
+        
+        TorreDeHanoi torreDeHanoi = new TorreDeHanoi(numeroDeDiscos,intervaloEntreJogadas);
 
         torreDeHanoi.jogar();
 
