@@ -2,6 +2,8 @@ package br.edu.undra.torredehanoi;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Classe modela um jogo de hanoi.<br>
@@ -24,9 +26,9 @@ public class TorreDeHanoi {
      */
     public TorreDeHanoi(int numeroDeDiscos) {
 
-        pino1 = new Pino("PINO_1");
-        pino2 = new Pino("PINO_2");
-        pino3 = new Pino("PINO_3");
+        pino1 = new Pino("ORIGEM");
+        pino2 = new Pino("DESTINO");
+        pino3 = new Pino("APOIO");
 
         for (int i = numeroDeDiscos; i >= 1; i--) {
             pino1.push(new Disco(i));
@@ -61,7 +63,6 @@ public class TorreDeHanoi {
     /**
      * Move, <strong>RECURSIVAMENTE, {@code} n</strong> discos do pino origem para pino
  <strong>extra</strong>.
- *  
      * @param origem Pino origem
      * @param destino Pino destino
      * @param extra Pino extra
@@ -113,7 +114,11 @@ public class TorreDeHanoi {
         
         System.err.println("========== " + this.jogadas.size() + " JOGADAS ===============");
 
-        jogadas.forEach(j -> System.err.println(j));
+        StringBuilder sb = new StringBuilder();
+        
+        jogadas.forEach( j -> sb.append(j.toString()).append("\n") );
+        
+        //System.err.println(sb);
 
         System.err.println("========== FIM JOGADAS ===============");
         System.err.println("\n========== ESTADO DO JOGO AO FINALIZAR ===============");
@@ -140,6 +145,15 @@ public class TorreDeHanoi {
                 Jogada j = new Jogada(origem, destino, d);
 
                 jogadas.add(j);
+                
+                 System.err.println(">>>"+j+"");
+                 System.err.println(this.getEstado()+"\n");
+                 
+                try {
+                    Thread.sleep(3500);
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(TorreDeHanoi.class.getName()).log(Level.SEVERE, null, ex);
+                }
 
             } else {
 
@@ -171,12 +185,12 @@ public class TorreDeHanoi {
 
     public static void main(String[] args) {
 
-        int numeroDeDiscos = 4;
+        int numeroDeDiscos = 5;
 
         if (args != null && args.length > 0) {
             try {
                 numeroDeDiscos = Integer.parseInt(args[0]);
-            } catch (Exception e) {
+            } catch (NumberFormatException e) {
                 throw new Error("NO NOMENTO, IMPOSSÍVEL JOGAR COM " + args[0] + " DISCO(S). TENTE NOVAMENTE. NÚMEROS INTEIROS POSITIVOS APENAS.");
             }
 
